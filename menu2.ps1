@@ -1,0 +1,92 @@
+while ($true) {
+    Clear-Host 
+    
+    Write-Host "===================================================" -ForegroundColor Cyan
+    Write-Host "                SISTEMA DE GESTAO                  " -ForegroundColor Yellow
+    Write-Host "===================================================" -ForegroundColor Cyan
+    Write-Host "1. Monitorizacao de Recursos (CPU, RAM, Disco)"
+    Write-Host "2. Gestao de Utilizadores e Grupos na AD"
+    Write-Host "3. Executar Plano de Backup (Seguranca)"
+    Write-Host "4. Gestao de Virtualizacao (Snapshots)"
+    Write-Host "0. Sair"
+    Write-Host "===================================================" -ForegroundColor Cyan
+
+    $opcao = Read-Host "Escolha uma opcao (0 a 4)"
+
+    switch ($opcao) {
+        '1' {
+   	    Write-Host "`n--- ESTADO DOS RECURSOS DO SISTEMA ---" -ForegroundColor Green
+            
+            $cpuStats = Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average
+            $cpu = [math]::Round($cpuStats.Average, 2)
+            
+            $mem = Get-CimInstance Win32_OperatingSystem | Select-Object @{Name="Uso_RAM";Expression={[math]::Round((($_.TotalVisibleMemorySize - $_.FreePhysicalMemory) / $_.TotalVisibleMemorySize) * 100, 2)}}
+            
+            Write-Host "Utilizacao de CPU: $cpu %"
+            Write-Host "Utilizacao de RAM: $($mem.Uso_RAM) %"
+            
+            # Mudanca feita aqui nesta linha para alterar "DriveLetter" para "Disco"
+            Get-Volume -DriveLetter C | Select-Object @{Name="Disco";Expression={$_.DriveLetter}}, @{Name="Livre(GB)";Expression={[math]::Round($_.SizeRemaining / 1GB, 2)}} | Out-Host
+            
+            Read-Host "`nPressione ENTER para voltar ao menu..."
+        }
+        '2' {
+            Write-Host "`n--- CRIACAO DE UTILIZADOR NA OU (atec.local) ---" -ForegroundColor Green
+            
+            $nome = Read-Host "Digite o nome do novo utilizador"
+            $pass = Read-Host "Digite a password para o utilizador" -AsSecureString
+            
+            $dominio = "DC=atec,DC=local"
+            $nomeOU = "CaixadeSapatos"
+            $caminhoOU = "OU=$nomeOU,$dominio"
+            
+            Write-Host "A verificar/criar a OU '$nomeOU'..." -ForegroundColor Cyan
+            try {
+                New-ADOrganizationalUnit -Name $nomeOU -Path $dominio -ErrorAction Stop
+            } catch {
+                # Se a OU ja existir, ele ignora o erro e continua
+            }
+            
+            Write-Host "A criar o utilizador $nome dentro da OU $nomeOU..." -ForegroundColor Cyan
+            New-ADUser -Name $nome -SamAccountName $nome -AccountPassword $pass -Enabled $true -Path $caminhoOU
+            
+            Write-Host "`nUtilizador $nome criado no dominio atec.local dentro da OU $nomeOU com sucesso!" -ForegroundColor Yellow
+            Read-Host "`nPressione ENTER para voltar ao menu..."
+        }
+        '3' {
+            Write-Host "`n--- EXECUCAO DE BACKUP AUTOMATICO ---" -ForegroundColor Green
+            $origem = "C:\Dados" 
+            $destino = "C:\Backups_Projeto"
+            
+            if (!(Test-Path $destino)) { New-Item $destino -Type Directory | Out-Null }
+            
+            Write-Host "A copiar ficheiros..." -ForegroundColor Cyan
+            Copy-Item $origem -Destination $destino -Recurse -Force
+            
+            Write-Host "Copia de seguranca concluida em $destino" -ForegroundColor Yellow
+            Read-Host "`nPressione ENTER para voltar ao menu..."
+        }
+        '4' {
+            Write-Host "`n--- GESTAO DE VIRTUALIZACAO (SNAPSHOT) ---" -ForegroundColor Green
+            Write-Host "A criar ponto de seguranca na Maquina Virtual..." -ForegroundColor Cyan
+            
+            try {
+                Checkpoint-VM -Name "ServidorTeste" -SnapshotName "Snapshot_Projeto" -ErrorAction Stop
+                Write-Host "Snapshot 'Snapshot_Projeto' criado com sucesso!" -ForegroundColor Yellow
+            } catch {
+                Write-Host "Erro: Maquina Virtual 'ServidorTeste' nao encontrada ou o Hyper-V nao esta ativo." -ForegroundColor Red
+            }
+            
+            Read-Host "`nPressione ENTER para voltar ao menu..."
+        }
+        '0' {
+            Write-Host "`nA fechar o sistema... Adeus!" -ForegroundColor Yellow
+            Start-Sleep -Seconds 1
+            exit
+        }
+        default {
+            Write-Host "`nOpcao invalida! Tenta de novo." -ForegroundColor Red
+            Start-Sleep -Seconds 2
+        }
+    }
+}
