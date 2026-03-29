@@ -1,17 +1,15 @@
 while ($true) {
-    Clear-Host 
-    
-    Write-Host "===================================================" -ForegroundColor Cyan
-    Write-Host "                SISTEMA DE GESTAO                  " -ForegroundColor Yellow
-    Write-Host "===================================================" -ForegroundColor Cyan
+    cls
+    Write-Host " -------------- SISTEMA DE GESTAO --------------" -ForegroundColor Yellow
     Write-Host "1. Monitorizacao de Recursos (CPU, RAM, Disco)"
     Write-Host "2. Gestao de Utilizadores e Grupos na AD"
     Write-Host "3. Executar Plano de Backup (Seguranca)"
     Write-Host "4. Gestao de Virtualizacao (Snapshots)"
+    Write-Host "5. Repor Backup"
     Write-Host "0. Sair"
-    Write-Host "===================================================" -ForegroundColor Cyan
+    Write-Host "-------------------------------------------------" -ForegroundColor Yellow
 
-    $opcao = Read-Host "Escolha uma opcao (0 a 4)"
+    $opcao = Read-Host "--> "
 
     switch ($opcao) {
         '1' {
@@ -75,6 +73,21 @@ while ($true) {
                 Write-Host "Snapshot 'Snapshot_Projeto' criado com sucesso!" -ForegroundColor Yellow
             } catch {
                 Write-Host "Erro: Maquina Virtual 'WIN_SERVER' nao encontrada ou o Hyper-V nao esta ativo." -ForegroundColor Red
+            }
+            
+            Read-Host "`nPressione ENTER para voltar ao menu..."
+        }
+	'5' {
+            Write-Host "`n--- REPOSICAO DE BACKUP ---" -ForegroundColor Green
+            $origemBackup = "C:\Backups_Projeto\Dados" 
+            $destinoRestauro = "C:\" 
+            
+            if (Test-Path $origemBackup) {
+                Write-Host "A repor ficheiros do backup..." -ForegroundColor Cyan
+                Copy-Item -Path $origemBackup -Destination $destinoRestauro -Recurse -Force
+                Write-Host "Recuperacao concluida com sucesso! Os dados voltaram para C:\Dados." -ForegroundColor Yellow
+            } else {
+                Write-Host "Erro: Nao foi encontrado nenhum backup em $origemBackup para repor." -ForegroundColor Red
             }
             
             Read-Host "`nPressione ENTER para voltar ao menu..."
