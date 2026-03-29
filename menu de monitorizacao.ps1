@@ -22,7 +22,7 @@ while ($true) {
         }
         '2' {
             Write-Host "`n--- ESPACO LIVRE NO DISCO (C:) ---" -ForegroundColor Green
-            Get-Volume -DriveLetter C | Select-Object DriveLetter, @{Name="Livre(GB)";Expression={[math]::Round($_.SizeRemaining / 1GB, 2)}}, @{Name="Total(GB)";Expression={[math]::Round($_.Size / 1GB, 2)}} | Out-Host
+            Get-PSdrive C | Out-Host
             Read-Host "`nPressione ENTER para voltar ao menu..."
         }
         '3' {

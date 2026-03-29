@@ -71,10 +71,10 @@ while ($true) {
             Write-Host "A criar ponto de seguranca na Maquina Virtual..." -ForegroundColor Cyan
             
             try {
-                Checkpoint-VM -Name "ServidorTeste" -SnapshotName "Snapshot_Projeto" -ErrorAction Stop
+                Checkpoint-VM -Name "WIN_SERVER" -SnapshotName "Snapshot_Projeto" -ErrorAction Stop
                 Write-Host "Snapshot 'Snapshot_Projeto' criado com sucesso!" -ForegroundColor Yellow
             } catch {
-                Write-Host "Erro: Maquina Virtual 'ServidorTeste' nao encontrada ou o Hyper-V nao esta ativo." -ForegroundColor Red
+                Write-Host "Erro: Maquina Virtual 'WIN_SERVER' nao encontrada ou o Hyper-V nao esta ativo." -ForegroundColor Red
             }
             
             Read-Host "`nPressione ENTER para voltar ao menu..."
