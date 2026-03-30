@@ -13,18 +13,18 @@ while ($true) {
 
     switch ($opcao) {
         '1' {
-   	    Write-Host "`n--- ESTADO DOS RECURSOS DO SISTEMA ---" -ForegroundColor Green
+            Write-Host "`n--- ESTADO DOS RECURSOS DO SISTEMA ---" -ForegroundColor Green
             
             $cpuStats = Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average
-            $cpu = [math]::Round($cpuStats.Average, 2)
+            $cpu = "{0:N2}" -f $cpuStats.Average
             
-            $mem = Get-CimInstance Win32_OperatingSystem | Select-Object @{Name="Uso_RAM";Expression={[math]::Round((($_.TotalVisibleMemorySize - $_.FreePhysicalMemory) / $_.TotalVisibleMemorySize) * 100, 2)}}
+            # Usar formatação de string na expressão da RAM
+            $mem = Get-CimInstance Win32_OperatingSystem | Select-Object @{Name="Uso_RAM";Expression={"{0:N2}" -f ((($_.TotalVisibleMemorySize - $_.FreePhysicalMemory) / $_.TotalVisibleMemorySize) * 100)}}
             
             Write-Host "Utilizacao de CPU: $cpu %"
             Write-Host "Utilizacao de RAM: $($mem.Uso_RAM) %"
-            
-            # Mudanca feita aqui nesta linha para alterar "DriveLetter" para "Disco"
-            Get-Volume -DriveLetter C | Select-Object @{Name="Disco";Expression={$_.DriveLetter}}, @{Name="Livre(GB)";Expression={[math]::Round($_.SizeRemaining / 1GB, 2)}} | Out-Host
+                  
+            Get-Volume -DriveLetter C | Select-Object @{Name="Disco";Expression={$_.DriveLetter}}, @{Name="Livre(GB)";Expression={"{0:N2}" -f ($_.SizeRemaining / 1GB)}} | Out-Host
             
             Read-Host "`nPressione ENTER para voltar ao menu..."
         }
@@ -77,7 +77,7 @@ while ($true) {
             
             Read-Host "`nPressione ENTER para voltar ao menu..."
         }
-	'5' {
+        '5' {
             Write-Host "`n--- REPOSICAO DE BACKUP ---" -ForegroundColor Green
             $origemBackup = "C:\Backups_Projeto\Dados" 
             $destinoRestauro = "C:\" 
