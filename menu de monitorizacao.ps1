@@ -23,6 +23,7 @@ while ($true) {
         '2' {
             Write-Host "`n--- ESPACO LIVRE NO DISCO (C:) ---" -ForegroundColor Green
             Get-PSdrive C | Out-Host
+	    Get-PSdrive E | Out-Host
             Read-Host "`nPressione ENTER para voltar ao menu..."
         }
         '3' {

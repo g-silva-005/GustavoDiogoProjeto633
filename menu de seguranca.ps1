@@ -4,8 +4,7 @@ while ($true) {
     Write-Host "1. Monitorizacao de Recursos (CPU, RAM, Disco)"
     Write-Host "2. Gestao de Utilizadores e Grupos na AD"
     Write-Host "3. Executar Plano de Backup (Seguranca)"
-    Write-Host "4. Gestao de Virtualizacao (Snapshots)"
-    Write-Host "5. Repor Backup"
+    Write-Host "4. Repor Backup"
     Write-Host "0. Sair"
     Write-Host "-------------------------------------------------" -ForegroundColor Yellow
 
@@ -53,8 +52,8 @@ while ($true) {
         }
         '3' {
             Write-Host "`n--- EXECUCAO DE BACKUP AUTOMATICO ---" -ForegroundColor Green
-            $origem = "C:\Dados" 
-            $destino = "C:\Backups_Projeto"
+            $origem = "E:\Dados" 
+            $destino = "E:\Backups_Projeto"
             
             if (!(Test-Path $destino)) { New-Item $destino -Type Directory | Out-Null }
             
@@ -65,22 +64,9 @@ while ($true) {
             Read-Host "`nPressione ENTER para voltar ao menu..."
         }
         '4' {
-            Write-Host "`n--- GESTAO DE VIRTUALIZACAO (SNAPSHOT) ---" -ForegroundColor Green
-            Write-Host "A criar ponto de seguranca na Maquina Virtual..." -ForegroundColor Cyan
-            
-            try {
-                Checkpoint-VM -Name "WIN_SERVER" -SnapshotName "Snapshot_Projeto" -ErrorAction Stop
-                Write-Host "Snapshot 'Snapshot_Projeto' criado com sucesso!" -ForegroundColor Yellow
-            } catch {
-                Write-Host "Erro: Maquina Virtual 'WIN_SERVER' nao encontrada ou o Hyper-V nao esta ativo." -ForegroundColor Red
-            }
-            
-            Read-Host "`nPressione ENTER para voltar ao menu..."
-        }
-        '5' {
             Write-Host "`n--- REPOSICAO DE BACKUP ---" -ForegroundColor Green
-            $origemBackup = "C:\Backups_Projeto\Dados" 
-            $destinoRestauro = "C:\" 
+            $origemBackup = "E:\Backups_Projeto\Dados" 
+            $destinoRestauro = "E:\" 
             
             if (Test-Path $origemBackup) {
                 Write-Host "A repor ficheiros do backup..." -ForegroundColor Cyan
