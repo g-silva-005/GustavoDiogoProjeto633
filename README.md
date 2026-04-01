@@ -2,7 +2,7 @@
 
 ---
 
-Contém os scripts feitos em powershell, para automatizar processos em servidores windows 2025 ou 2022 
+Contém scripts feitos em powershell, para automatizar processos em servidores windows 2025 ou 2022 
 
 ---
 
