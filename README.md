@@ -2,7 +2,7 @@
 
 ---
 
-Contém os scripts feitos em bash, para automatizar processos na area de administracao de um site e backup do mesmo e da sua base de dados 
+Contém os scripts feitos em powershell, para automatizar processos em servidores windows 2025 ou 2022 
 
 ---
 
