@@ -27,7 +27,7 @@ while ($true) {
             
             Read-Host "`nPressione ENTER para voltar ao menu..."
         }
-        '2' {
+	'2' {
             Write-Host "`n--- CRIACAO DE UTILIZADOR NA OU (atec.local) ---" -ForegroundColor Green
             
             $nome = Read-Host "Digite o nome do novo utilizador"
@@ -41,13 +41,20 @@ while ($true) {
             try {
                 New-ADOrganizationalUnit -Name $nomeOU -Path $dominio -ErrorAction Stop
             } catch {
-
             }
             
             Write-Host "A criar o utilizador $nome dentro da OU $nomeOU..." -ForegroundColor Cyan
-            New-ADUser -Name $nome -SamAccountName $nome -AccountPassword $pass -Enabled $true -Path $caminhoOU
             
-            Write-Host "`nUtilizador $nome criado no dominio atec.local dentro da OU $nomeOU com sucesso!" -ForegroundColor Yellow
+            New-ADUser -Name $nome `
+                       -SamAccountName $nome `
+                       -AccountPassword $pass `
+                       -Enabled $true `
+                       -Path $caminhoOU `
+                       -ChangePasswordAtLogon $false `
+                       -PasswordNeverExpires $true `
+                       -CannotChangePassword $true
+            
+            Write-Host "`nUtilizador $nome criado!" -ForegroundColor Yellow
             Read-Host "`nPressione ENTER para voltar ao menu..."
         }
         '3' {
