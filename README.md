@@ -22,7 +22,7 @@ inclui 2 menus:
 
 ### Como iniciar ambos os scripts
 
-- Fazer git clone do repositorio para o servidor
+- Fazer "git clone <link-do-repositorio>" do repositorio para o servidor
 - Depois se preferires podes fazer um atalho do script para o ambiente de trabalho ou entao (com o botao direito do rato) executares com a powershell
 - Agora é só aproveitares a magia do scripts
 
