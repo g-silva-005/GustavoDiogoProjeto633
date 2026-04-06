@@ -78,7 +78,7 @@ while ($true) {
             if (Test-Path $origemBackup) {
                 Write-Host "A repor ficheiros do backup..." -ForegroundColor Cyan
                 Copy-Item -Path $origemBackup -Destination $destinoRestauro -Recurse -Force
-                Write-Host "Recuperacao concluida com sucesso! Os dados voltaram para C:\Dados." -ForegroundColor Yellow
+                Write-Host "Recuperacao concluida com sucesso! Os dados voltaram para E:\Dados." -ForegroundColor Yellow
             } else {
                 Write-Host "Erro: Nao foi encontrado nenhum backup em $origemBackup para repor." -ForegroundColor Red
             }
